@@ -10,47 +10,29 @@ class LFUCache(BaseCaching):
     def __init__(self):
         """class constructor"""
         super().__init__()
-        self.keep_track = []
         self.count = {}
 
     def put(self, key, item):
-        """puts items in the cache"""
-        if key is not None and item is not None:
-            self.cache_data[key] = item
-            if self.count.get(key):
+        """  assign to the dictionary self.cache_data the item value
+        for the key key
+        """
+        if key and item:
+            if (len(self.cache_data) == self.MAX_ITEMS
+                    and key not in self.cache_data):
+                discarded = min(self.count, key=self.count.get)
+                del self.cache_data[discarded]
+                del self.count[discarded]
+                print("DISCARD: {}".format(discarded))
+
+            if key in self.cache_data:
                 self.count[key] += 1
             else:
                 self.count[key] = 1
-
-            if key in self.keep_track:
-                self.keep_track.remove(key)
-            self.keep_track.append(key)
-
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                val_to_find_key = min(self.count.values())
-                list_of_leasts = []
-                for k, v in self.count.items():
-                    if v == val_to_find_key:
-                        list_of_leasts.append(k)
-                if len(list_of_leasts) > 1:
-                    for j in self.keep_track:
-                        if j in list_of_leasts:
-                            to_delete = j
-                            break
-                elif len(list_of_leasts) == 1:
-                    to_delete = list_of_leasts[0]
-                print(list_of_leasts)
-                print("DISCARD: {}".format(to_delete))
-                del self.cache_data[to_delete]
-                del self.count[to_delete]
-                self.keep_track.remove(to_delete)
+            self.cache_data[key] = item
 
     def get(self, key):
-        """returns the value for the specified key"""
-        if key is None:
-            return None
+        """ returns the value in self.cache_data linked to key
+        """
         if key in self.cache_data:
             self.count[key] += 1
-            self.keep_track.remove(key)
-            self.keep_track.append(key)
-            return self.cache_data[key]
+            return self.cache_data.get(key)
