@@ -9,6 +9,14 @@ app = Flask(__name__)
 babel = Babel(app)
 
 
+users = {
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "fr", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+}
+
+
 class Config:
     """configuration class for babel"""
     LANGUAGES = ["en", "fr"]
@@ -26,6 +34,9 @@ def get_locale():
     locale = request.args.get("locale", None)
     if locale is not None and locale in app.config["LANGUAGES"]:
         return locale
+    locale = g.user.get("locale", None)
+    if locale is not None and locale in app.config["LANGUAGES"]:
+        return locale
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
@@ -34,15 +45,7 @@ def hello():
     """
     hello.
     """
-    return render_template('5-index.html')
-
-
-users = {
-    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
-    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
-    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
-    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
-}
+    return render_template('6-index.html')
 
 
 def get_user() -> Optional[Dict]:
