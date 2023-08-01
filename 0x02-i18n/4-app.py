@@ -35,7 +35,7 @@ def hello():
     """
     hello.
     """
-    return render_template('2-index.html')
+    return render_template('4-index.html')
 
 
 if __name__ == "__main__":
