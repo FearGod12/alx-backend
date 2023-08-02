@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""the babel instance module"""
-from typing import Dict, Union, Optional
+"""the babel instance module
+with config class and some other functions
+"""
 
-from flask_babel import Babel, lazy_gettext as _l
+from typing import Dict, Optional
+
+from flask_babel import Babel
 from flask import Flask, render_template, request, g
 
 app = Flask(__name__)
